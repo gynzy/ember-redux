@@ -14,7 +14,7 @@ To see what glimmer and ember redux look like together checkout the component fi
 import Component from '@glimmer/component';
 import { action, computed } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 const stateToComputed = function(state, attrs) {
   console.log(this.color);

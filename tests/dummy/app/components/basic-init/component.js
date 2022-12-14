@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 var stateToComputed = state => ({
   low: state.low

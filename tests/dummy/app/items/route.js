@@ -1,6 +1,6 @@
 import ajax from 'dummy/utilities/ajax';
 import { isPresent } from '@ember/utils';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 
 var model = (dispatch) => {
   return ajax('/api/items', 'GET').then(response => dispatch({type: 'DESERIALIZE_ITEMS', response: response}));

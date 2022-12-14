@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 const makeUniqueSelector = () => {
   return (state) => state.low;

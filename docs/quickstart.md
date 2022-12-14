@@ -36,7 +36,7 @@ After we've got our reducer setup we need to remove the computed and action we c
 
 import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 const stateToComputed = (state) => {
   return {

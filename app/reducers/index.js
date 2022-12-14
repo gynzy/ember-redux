@@ -1,1 +1,1 @@
-export {default} from 'ember-redux/reducers/index';
+export {default} from '@gynzy/ember-redux/reducers/index';

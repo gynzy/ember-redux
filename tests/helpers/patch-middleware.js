@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import createSaga from 'redux-saga';
 import addAsync from 'dummy/sagas/counter';
 import reducers from 'dummy/reducers/index';
-import ReduxService from 'ember-redux/services/redux';
+import ReduxService from '@gynzy/ember-redux/services/redux';
 
 export function patchMiddleware(hooks) {
   hooks.beforeEach(function() {

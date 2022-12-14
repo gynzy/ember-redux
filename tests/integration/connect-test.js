@@ -1,4 +1,4 @@
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
