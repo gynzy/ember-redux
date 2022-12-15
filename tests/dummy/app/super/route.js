@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 
 var model = () => {
   return [];

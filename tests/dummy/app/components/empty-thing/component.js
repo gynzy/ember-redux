@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 var EmptyThingComponent = Component.extend({
   layout: hbs`

@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import filterRating from 'dummy/utilities/filter';
 
 var stateToComputed = (state) => {

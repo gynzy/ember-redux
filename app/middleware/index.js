@@ -1,1 +1,1 @@
-export {default} from 'ember-redux/middleware/index';
+export {default} from '@gynzy/ember-redux/middleware/index';

@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import ajax from 'dummy/utilities/ajax';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 
 var model = (dispatch, params) => {
   var { user_id } = params;

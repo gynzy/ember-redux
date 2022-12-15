@@ -72,7 +72,7 @@ In the route itself we use ember-fetch to make the network call. When this has c
 ```ts
 //app/routes/restaurants.ts
 import fetch from 'fetch';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 import { Restaurants } from '../types/restaurants';
 import {
   ListDispatch,
@@ -252,7 +252,7 @@ Because the restaurant-list component is html only we need a parent component th
 
 ```ts
 //app/components/restaurant-items.ts
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { RootState } from '../types/index';
 
 const stateToComputed = (state: RootState) => ({
@@ -313,7 +313,7 @@ Next we define the detail route itself. Similar to the list route in part 1, we 
 ```ts
 //app/routes/restaurants/detail.ts
 import fetch from 'fetch';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 import { RestaurantHash } from '../../types/restaurants';
 import {
   DetailDispatch,
@@ -480,7 +480,7 @@ And to provide the reviews for this presentation component we will add another p
 
 ```ts
 //app/components/restaurant-item.ts
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { RootState } from '../types/index';
 import _ from 'lodash';
 
@@ -604,7 +604,7 @@ Now in the detail component we use the getSelectedRestaurant selector
 
 ```ts
 //app/components/restaurant-item.ts
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { RootState } from '../types/index';
 import { getSelectedRestaurant } from '../reducers/restaurants';
 
@@ -619,7 +619,7 @@ And in the list component we can use the getRestaurants selector
 
 ```ts
 //app/components/restaurant-items.ts
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { RootState } from '../types/index';
 import { getRestaurants } from '../reducers/restaurants';
 
@@ -846,7 +846,7 @@ Now we can update the selector used in the detail parent component
 
 ```ts
 //app/components/restaurant-item.ts
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { RootState } from '../types/index';
 import { getReviews } from '../reducers/restaurants';
 
@@ -923,7 +923,7 @@ Next open the restaurant-item component and add the function dispatchToActions. 
 ```ts
 //app/components/restaurant-item.ts
 import fetch from 'fetch';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { RootState } from '../types/index';
 import { RestaurantHash } from '../types/restaurants';
 import { RateDispatch, RATE_ITEM } from '../actions/restaurants';

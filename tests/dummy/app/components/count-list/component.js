@@ -2,7 +2,7 @@ import { inject } from '@ember/service';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import hbs from 'htmlbars-inline-precompile';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 var stateToComputed = function(state, attrs) {
   var component = this;

@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
 import ajax from 'dummy/utilities/ajax';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 var stateToComputed = (state) => {
   return {

@@ -1,6 +1,6 @@
 import { compose, combineReducers } from 'redux';
 import middlewares from 'dummy/middleware/index';
-import ReduxService from 'ember-redux/services/redux';
+import ReduxService from '@gynzy/ember-redux/services/redux';
 import low from 'dummy/reducers/low';
 import high from 'dummy/reducers/high';
 

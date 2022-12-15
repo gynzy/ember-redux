@@ -31,7 +31,7 @@ https://ember-twiddle.com/4bb9c326a7e54c739b1f5a5023ccc805
 ```js
 import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import getUsersByAccountId from '../reducers';
 import fetch from 'fetch';
 
@@ -85,7 +85,7 @@ As of version 6 ember-redux now supports both ember component and glimmer compon
 ```js
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import getUsersByAccountId from '../reducers';
 import fetch from 'fetch';
 

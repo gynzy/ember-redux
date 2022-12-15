@@ -2,7 +2,7 @@ import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click, find } from '@ember/test-helpers';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import Component from '@glimmer/component';
 import { gte } from 'ember-compatibility-helpers';
 

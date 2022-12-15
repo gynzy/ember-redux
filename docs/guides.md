@@ -32,7 +32,7 @@ In the route itself we use ember-fetch to make the network call. When this has c
 ```js
 //app/routes/restaurants.js
 import fetch from 'fetch';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 
 const model = dispatch => {
   return fetch('/api/restaurants')
@@ -99,7 +99,7 @@ Because the restaurant-list component is html only we need a parent component th
 
 ```js
 //app/components/restaurant-items.js
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 
 const stateToComputed = (state) => ({
   restaurants: state.restaurants.all
@@ -143,7 +143,7 @@ Next we define the detail route itself. Similar to the list route in part 1, we 
 ```js
 //app/routes/restaurants/detail.js
 import fetch from 'fetch';
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 
 const model = (dispatch, params) => {
   return fetch(`/api/restaurants/${params.id}`)
@@ -237,7 +237,7 @@ And to provide the reviews for this presentation component we will add another p
 
 ```js
 //app/components/restaurant-item.js
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import _ from 'lodash';
 
 const stateToComputed = (state) => ({
@@ -304,7 +304,7 @@ Now in the detail component we use the getSelectedRestaurant selector
 
 ```js
 //app/components/restaurant-item.js
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import {
   getSelectedRestaurant
 } from '../reducers/restaurants';
@@ -320,7 +320,7 @@ And in the list component we can use the getRestaurants selector
 
 ```js
 //app/components/restaurant-items.js
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { getRestaurants } from '../reducers/restaurants';
 
 const stateToComputed = (state) => ({
@@ -459,7 +459,7 @@ Now we can update the selector used in the detail parent component
 
 ```js
 //app/components/restaurant-item.js
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import { getReviews } from '../reducers/restaurants';
 
 const stateToComputed = (state) => ({
@@ -537,7 +537,7 @@ One important point to note in this example is that because we want to ask for a
 ```js
 //app/components/restaurant-item.js
 import fetch from 'fetch';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import {
   getReviews,
   getSelectedId

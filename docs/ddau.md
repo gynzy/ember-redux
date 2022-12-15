@@ -50,7 +50,7 @@ With the route in place we now need to fire an async network request to fetch th
 ```js
 //app/users/route.js
 
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 import ajax from 'example/utilities/ajax';
 
 const model = (dispatch) => {
@@ -121,7 +121,7 @@ Now that we have fetched the data we declare the `Container Component` that will
 
 import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
-import { connect } from 'ember-redux';
+import { connect } from '@gynzy/ember-redux';
 import fetch from 'fetch';
 
 const stateToComputed = (state) => {

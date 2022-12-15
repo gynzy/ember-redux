@@ -1,4 +1,4 @@
-import { route } from 'ember-redux';
+import { route } from '@gynzy/ember-redux';
 
 var beforeModel = (dispatch) => {
   let roles = JSON.parse(document.querySelector('[preload-roles]')?.dataset.configuration ?? '{}');
