@@ -1,0 +1,17 @@
+{
+  default_rails_step_image: 'eu.gcr.io/unicorn-985/docker-images_ruby-3.1.0_rails-7.0.2.2:deploy-04c4df8affdd378882447beb5b540d063a7e5f6e',
+  verify_deploy_image: 'eu.gcr.io/unicorn-985/docker-images_ping-service:deploy-82b246eaf567f540757603a9d7bb26e52fc1d803',
+  jsonnet_bin_image: 'eu.gcr.io/unicorn-985/docker-images_jsonnet:deploy-e6988075021279e18981daa16806105e23ffc8ae',
+  helm_action_image: 'docker://europe-docker.pkg.dev/gynzy-test-project/public-images/helm-action:v2',
+  mysql_action_image: 'docker://europe-docker.pkg.dev/gynzy-test-project/public-images/mysql-action:v1',
+  docker_action_image: 'docker://europe-docker.pkg.dev/gynzy-test-project/public-images/push-to-gcr-github-action:v1',
+  default_job_image: 'alpine:3.16.2',
+  default_mysql57_image: 'eu.gcr.io/unicorn-985/docker-images_mysql57_utf8mb4:deploy-ce2266ec012075a8077bbd0d7a3dcb2ef05ede68',
+  default_mysql8_image: 'eu.gcr.io/unicorn-985/docker-images_mysql8_utf8mb4:deploy-e187331bbbc815cc129038442d5b572937e67665',
+  default_cloudsql_image: 'eu.gcr.io/unicorn-985/docker-images_cloudsql-sidecar:deploy-b8d73f131b54b9877a744b8fab4cb065820d6858',
+  default_redis_image: 'redis:5.0.6',
+  default_unicorns_image: 'node:14.20',
+  default_pubsub_image: 'messagebird/gcloud-pubsub-emulator:latest',
+  default_backend_nest_image: 'node:14.20',
+  default_mongodb_image: 'mongo:4.2',
+}

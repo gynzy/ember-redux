@@ -6,7 +6,8 @@
     "build": "ember build",
     "lint:js": "eslint .",
     "start": "ember serve",
-    "test": "ember test"
+    "test": "ember test",
+    "prepare": "husky install"
   },
   "homepage": "https://github.com/ember-redux/ember-redux",
   "bugs": {
@@ -41,6 +42,7 @@
     "ember-try": "^1.4.0",
     "eslint-plugin-ember": "^7.7.1",
     "eslint-plugin-node": "^10.0.0",
+    "husky": "^8.0.2",
     "loader.js": "^4.2.3",
     "qunit": "^2.19.3",
     "redux-saga": "^0.16.0",
