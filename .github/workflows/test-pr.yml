@@ -1,0 +1,31 @@
+"jobs":
+  "test-pr":
+    "container":
+      "credentials":
+        "password": "${{ secrets.docker_gcr_io }}"
+        "username": "_json_key"
+      "image": "eu.gcr.io/unicorn-985/docker-images_node14-with-libnss:deploy-5893c6fca68ea35a0a51e855d5a3cb7082ef39fa"
+    "runs-on":
+    - "ubuntu-latest"
+    "steps":
+    - "name": "Check out repository code"
+      "uses": "actions/checkout@v2"
+      "with":
+        "ref": "${{ github.event.pull_request.head.sha }}"
+    - "env":
+        "NPM_TOKEN": "${{ secrets.npm_token }}"
+      "name": "set npm_token"
+      "run": "\ncat <<EOF > .npmrc\nregistry=https://npm.gynzy.net/\nalways-auth=\"true\"\n\"//npm.gynzy.net/:_authToken\"=\"${NPM_TOKEN}\"\nEOF\n      "
+    - "name": "yarn"
+      "run": "yarn --cache-folder .yarncache --frozen-lockfile --prefer-offline || yarn --cache-folder .yarncache --frozen-lockfile --prefer-offline"
+    - "name": "setup chrome"
+      "uses": "browser-actions/setup-chrome@latest"
+    - "name": "test"
+      "run": "./node_modules/.bin/ember test"
+    - "env":
+        "PR_NUMBER": "${{ github.event.number }}"
+      "name": "publish"
+      "run": "\nbash -c 'set -xeo pipefail;\n\nVERSION=$(yarn version --non-interactive 2>/dev/null | grep \"Current version\" | grep -o -P '[0-9a-zA-Z_.-]+$' );\nif [[ ! -z \"${PR_NUMBER}\" ]]; then\n\techo \"Setting tag/version for pr build.\";\n\tTAG=pr-$PR_NUMBER;\n\tPUBLISHVERSION=\"$VERSION-pr$PR_NUMBER.$GITHUB_RUN_NUMBER\";\nelif [[ \"${GITHUB_REF_TYPE}\" == \"tag\" ]]; then\n\tif [[ \"${GITHUB_REF_NAME}\" != \"${VERSION}\" ]]; then\n\t  echo \"Tag version does not match package version. They should match. Exiting\";\n\t\texit 1;\n\tfi\n\techo \"Setting tag/version for release/tag build.\";\n\tPUBLISHVERSION=$VERSION;\n\tTAG=\"latest\";\nelse\n\texit 1\nfi\n\nyarn publish --non-interactive --no-git-tag-version --tag \"$TAG\" --new-version \"$PUBLISHVERSION\"';\n    "
+    "timeout-minutes": 30
+"name": "test-pr"
+"on": "pull_request"
