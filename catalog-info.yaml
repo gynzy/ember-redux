@@ -3,11 +3,9 @@ kind: "Component"
 metadata:
   name: "ember-redux"
   description: |
-    Ember bindings for Redux
-
-    During our Ember 4.0 upgrade we ran into some issues with ember-redux, and we had to fork it in order to fix it.
-    These fixes are also available in the upstream repo, but they are not released yet.
-    See this pull request for further details: https://github.com/ember-redux/ember-redux/pull/213
+    During our Ember 4.0 upgrade, we encountered issues with ember-redux and had to fork it for necessary fixes. 
+    These fixes can also be found in the upstream repo but have not been released yet. 
+    For more details, check out this pull request: https://github.com/ember-redux/ember-redux/pull/213.
   annotations:
     "backstage.io/source-location": "url:https://github.com/gynzy/ember-redux"
     "backstage.io/edit-url": "https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml"
