@@ -1,20 +1,20 @@
-apiVersion: "backstage.io/v1alpha1"
-kind: "Component"
+apiVersion: backstage.io/v1alpha1
+kind: Component
 metadata:
-  name: "ember-redux"
+  name: ember-redux
   description: |
     During our Ember 4.0 upgrade, we encountered issues with ember-redux and had to fork it for necessary fixes. 
     These fixes can also be found in the upstream repo but have not been released yet. 
     For more details, check out this pull request: https://github.com/ember-redux/ember-redux/pull/213.
+  tags:
+  - frontend
+  - ember
+  - redux
   annotations:
-    "backstage.io/source-location": "url:https://github.com/gynzy/ember-redux"
-    "backstage.io/edit-url": "https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml"
-    "backstage.io/view-url": "https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml"
-    tags:
-    - "frontend"
-    - "ember"
-    - "redux"
+    backstage.io/source-location: url:https://github.com/gynzy/ember-redux
+    backstage.io/edit-url: https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml
+    backstage.io/view-url: https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml
 spec:
-  type: "library"
-  lifecycle: "production"
-  owner: "guild-frontend"
+  type: library
+  lifecycle: production
+  owner: guild-frontend
