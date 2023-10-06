@@ -12,7 +12,10 @@ metadata:
     "backstage.io/source-location": "url:https://github.com/gynzy/ember-redux"
     "backstage.io/edit-url": "https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml"
     "backstage.io/view-url": "https://github.com/gynzy/ember-redux/tree/master/catalog-info.yaml"
-    tags: [frontend, "ember", "redux"]
+    tags:
+    - "frontend"
+    - "ember"
+    - "redux"
 spec:
   type: "library"
   lifecycle: "production"
