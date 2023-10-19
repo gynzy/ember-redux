@@ -1,6 +1,6 @@
 #!/bin/sh
 # Use environment PR_NUMBER to fetch a pull request.
-# export PR_NUMBER=12345; sh .github/jsonnet/pull-upstream-and-rebuild.sh
+# export PR_NUMBER=12345 sh .github/jsonnet/pull-upstream-and-rebuild.sh
 #
 # Usage: sh .github/jsonnet/pull-upstream-and-rebuild.sh
 
