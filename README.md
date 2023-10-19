@@ -1,3 +1,9 @@
+# Gynzy release procedure
+
+Step 1: create PR and bump version.
+Step 2: test provided PR package in your software
+Step 3: merge PR to release the version
+
 # Ember Redux
 
 [![Travis][build-badge]][build] [![Code Climate][climate-badge]][climate] [![Score][score-badge]][score] [![Downloads][downloads-badge]][npm] [![npm package][npm-badge]][npm]
