@@ -9,7 +9,6 @@ local testJob = util.ghJob(
     util.checkoutAndYarn(ref='${{ github.event.pull_request.head.sha }}', fullClone=false),
     util.action('setup chrome', 'browser-actions/setup-chrome@latest'),
     util.step('test', './node_modules/.bin/ember test'),
-    util.yarnPublish(isPr=true),
   ],
   runsOn=['ubuntu-latest'],  // it's public fork. don't use private runners for public fork
 );
