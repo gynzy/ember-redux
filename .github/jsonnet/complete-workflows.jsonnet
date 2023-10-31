@@ -15,9 +15,9 @@
     $.pipeline(
       'publish-prod',
       [
-        $.yarnPublishJob(repositories, runsOn=runsOn),
+        $.yarnPublishJob(repositories=repositories, runsOn=runsOn),
       ],
-      event={ push: { branches: ['${{ github.event.pull_request.base.ref }}'] } },
+      event={ push: { branches: ['${{ github.event.pull_request.base.repo.default_branch }}'] } },
     ) +
     $.pipeline(
       'pr',
