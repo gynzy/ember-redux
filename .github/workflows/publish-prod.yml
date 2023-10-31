@@ -71,4 +71,4 @@
 "on":
   "push":
     "branches":
-    - "${{ github.event.pull_request.base.repo.default_branch }}"
+    - "master"

@@ -13,4 +13,4 @@ local testJob = util.ghJob(
   runsOn=['ubuntu-latest'],  // it's public fork. don't use private runners for public fork
 );
 
-util.workflowJavascriptPackage(testJob=testJob)
+util.workflowJavascriptPackage(testJob=testJob, branch='master')
