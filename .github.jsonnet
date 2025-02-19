@@ -1,5 +1,5 @@
 local util = import './.github/jsonnet/index.jsonnet';
-local image = 'eu.gcr.io/unicorn-985/docker-images_node14-with-libnss:deploy-5893c6fca68ea35a0a51e855d5a3cb7082ef39fa';
+local image = 'europe-docker.pkg.dev/unicorn-985/private-images/docker-images_node20-with-libnss:deploy-5893c6fca68ea35a0a51e855d5a3cb7082ef39fa';
 
 local testJob = util.ghJob(
   'test-pr',
