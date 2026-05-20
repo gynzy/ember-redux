@@ -10,21 +10,19 @@ local yarn = import 'yarn.jsonnet';
    *
    * @param {array} [args=[]] - Additional command line arguments for pnpm install
    * @param {object} [with={}] - Additional configuration options
-   * @param {string} [version='10'] - PNPM version to use
    * @param {boolean} [prod=false] - Whether to install only production dependencies
    * @param {string} [storeDir=null] - Directory for pnpm store
    * @param {string} [ifClause=null] - Conditional expression to determine if step should run
    * @param {string} [workingDirectory=null] - Directory to run pnpm in
    * @returns {steps} - Array containing a single step object
    */
-  install(args=[], with={}, version='10', prod=false, storeDir=null, ifClause=null, workingDirectory=null)::
+  install(args=[], with={}, prod=false, storeDir=null, ifClause=null, workingDirectory=null)::
     base.action(
       'Install pnpm tool',
       'pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320',  // v5
-      with=
-      { version: version } +
-      with,
+      with=with,
       ifClause=ifClause,
+      workingDirectory=workingDirectory,
     ) +
     self.installPackages(
       args=args,
@@ -193,5 +191,156 @@ local yarn = import 'yarn.jsonnet';
         ),
       ],
       event='pull_request',
+    ),
+
+  /**
+   * Creates a step to publish a package with pnpm, handling version/tag for PR, tag and branch builds.
+   *
+   * @param {boolean} [isPr=true] - Whether this is a PR build (affects versioning)
+   * @param {string} [ifClause=null] - Conditional expression to determine if step should run
+   * @returns {steps} - Array containing a single step object
+   */
+  pnpmPublish(isPr=true, ifClause=null)::
+    base.step(
+      'publish',
+      |||
+        bash -c 'set -xeo pipefail;
+
+        cp package.json package.json.bak;
+
+        VERSION=$(node -p "require(\"./package.json\").version");
+        if [[ ! -z "${PR_NUMBER}" ]]; then
+          echo "Setting tag/version for pr build.";
+          TAG=pr-$PR_NUMBER;
+          PUBLISHVERSION="$VERSION-pr$PR_NUMBER.$GITHUB_RUN_NUMBER";
+        elif [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+          if [[ "${GITHUB_REF_NAME}" != "${VERSION}" ]]; then
+            echo "Tag version does not match package version. They should match. Exiting";
+            exit 1;
+          fi
+          echo "Setting tag/version for release/tag build.";
+          PUBLISHVERSION=$VERSION;
+          TAG="latest";
+        elif [[ "${GITHUB_REF_TYPE}" == "branch" && ( "${GITHUB_REF_NAME}" == "main" || "${GITHUB_REF_NAME}" == "master" ) ]] || [[ "${GITHUB_EVENT_NAME}" == "deployment" ]]; then
+          echo "Setting tag/version for release/tag build.";
+          PUBLISHVERSION=$VERSION;
+          TAG="latest";
+        else
+          exit 1
+        fi
+
+        npm version --no-git-tag-version --allow-same-version "$PUBLISHVERSION";
+        pnpm publish --no-git-checks --tag "$TAG";
+
+        mv package.json.bak package.json;
+        ';
+      |||,
+      env={} + (if isPr then { PR_NUMBER: '${{ github.event.number }}' } else {}),
+      ifClause=ifClause,
+    ),
+
+  /**
+   * Creates steps to publish a package to multiple repositories with pnpm.
+   *
+   * @param {boolean} isPr - Whether this is a PR build (affects versioning)
+   * @param {array} repositories - List of repository types ('gynzy' or 'github')
+   * @param {string} [ifClause=null] - Conditional expression to determine if steps should run
+   * @returns {steps} - Array of step objects for publishing to all repositories
+   */
+  pnpmPublishToRepositories(isPr, repositories, ifClause=null)::
+    (std.flatMap(function(repository)
+                   if repository == 'gynzy' then [yarn.setGynzyNpmToken(ifClause=ifClause), self.pnpmPublish(isPr=isPr, ifClause=ifClause)]
+                   else if repository == 'github' then [yarn.setGithubNpmToken(ifClause=ifClause), self.pnpmPublish(isPr=isPr, ifClause=ifClause)]
+                   else error 'Unknown repository type given.',
+                 repositories)),
+
+  /**
+   * Creates a GitHub Actions job for publishing preview pnpm packages from PRs.
+   *
+   * @param {string} [image='node:24'] - Docker image to use for the job
+   * @param {boolean} [useCredentials=false] - Whether to use Docker registry credentials
+   * @param {string} [gitCloneRef='${{ github.event.pull_request.head.sha }}'] - Git reference to checkout
+   * @param {array} [buildSteps=null] - Build steps; null defaults to `[pnpm run build]`. Pass `[]` to skip build.
+   * @param {boolean} [checkVersionBump=true] - Whether to check if package version was bumped
+   * @param {array} [repositories=['gynzy']] - List of repositories to publish to
+   * @param {boolean|string} [onChangedFiles=false] - Whether to only run on changed files (or glob pattern)
+   * @param {string} [changedFilesHeadRef=null] - Head reference for changed files comparison
+   * @param {string} [changedFilesBaseRef=null] - Base reference for changed files comparison
+   * @param {string} [runsOn=null] - Runner type to use
+   * @returns {jobs} - GitHub Actions job definition
+   */
+  pnpmPublishPreviewJob(
+    image='node:24',
+    useCredentials=false,
+    gitCloneRef='${{ github.event.pull_request.head.sha }}',
+    buildSteps=null,
+    checkVersionBump=true,
+    repositories=['gynzy'],
+    onChangedFiles=false,
+    changedFilesHeadRef=null,
+    changedFilesBaseRef=null,
+    runsOn=null,
+  )::
+    local effectiveBuildSteps = if buildSteps == null then [base.step('build', 'pnpm run build')] else buildSteps;
+    local ifClause = (if onChangedFiles != false then "steps.changes.outputs.package == 'true'" else null);
+    base.ghJob(
+      'pnpm-publish-preview',
+      runsOn=runsOn,
+      image=image,
+      useCredentials=useCredentials,
+      steps=
+      [self.checkoutAndPnpm(ref=gitCloneRef, fullClone=false, source=repositories[0], pnpmInstallArgs=['--frozen-lockfile'])] +
+      (if onChangedFiles != false then misc.testForChangedFiles({ package: onChangedFiles }, headRef=changedFilesHeadRef, baseRef=changedFilesBaseRef) else []) +
+      (if checkVersionBump then [
+         base.action('check-version-bump', uses='del-systems/check-if-version-bumped@d5d13ffd75dc8aa9c2e1dca10d9bb27be10307b2', with={  // check-if-version-bumped@d5d13 == v2
+           token: '${{ github.token }}',
+         }, ifClause=ifClause),
+       ] else []) +
+      (if onChangedFiles != false then std.map(function(step) std.map(function(s) s { 'if': ifClause }, step), effectiveBuildSteps) else effectiveBuildSteps) +
+      self.pnpmPublishToRepositories(isPr=true, repositories=repositories, ifClause=ifClause),
+      permissions={ packages: 'write', contents: 'read', 'pull-requests': 'read' },
+    ),
+
+  /**
+   * Creates a GitHub Actions job for publishing pnpm packages from main branch or releases.
+   *
+   * @param {string} [image='node:24'] - Docker image to use for the job
+   * @param {boolean} [useCredentials=false] - Whether to use Docker registry credentials
+   * @param {string} [gitCloneRef='${{ github.sha }}'] - Git reference to checkout
+   * @param {array} [buildSteps=null] - Build steps; null defaults to `[pnpm run build]`. Pass `[]` to skip build.
+   * @param {array} [repositories=['gynzy']] - List of repositories to publish to
+   * @param {boolean|string} [onChangedFiles=false] - Whether to only run on changed files (or glob pattern)
+   * @param {string} [changedFilesHeadRef=null] - Head reference for changed files comparison
+   * @param {string} [changedFilesBaseRef=null] - Base reference for changed files comparison
+   * @param {string} [ifClause=null] - Conditional expression to determine if job should run
+   * @param {string} [runsOn=null] - Runner type to use
+   * @returns {jobs} - GitHub Actions job definition
+   */
+  pnpmPublishJob(
+    image='node:24',
+    useCredentials=false,
+    gitCloneRef='${{ github.sha }}',
+    buildSteps=null,
+    repositories=['gynzy'],
+    onChangedFiles=false,
+    changedFilesHeadRef=null,
+    changedFilesBaseRef=null,
+    ifClause=null,
+    runsOn=null,
+  )::
+    local effectiveBuildSteps = if buildSteps == null then [base.step('build', 'pnpm run build')] else buildSteps;
+    local stepIfClause = (if onChangedFiles != false then "steps.changes.outputs.package == 'true'" else null);
+    base.ghJob(
+      'pnpm-publish',
+      image=image,
+      runsOn=runsOn,
+      useCredentials=useCredentials,
+      steps=
+      [self.checkoutAndPnpm(ref=gitCloneRef, fullClone=false, source=repositories[0], pnpmInstallArgs=['--frozen-lockfile'])] +
+      (if onChangedFiles != false then misc.testForChangedFiles({ package: onChangedFiles }, headRef=changedFilesHeadRef, baseRef=changedFilesBaseRef) else []) +
+      (if onChangedFiles != false then std.map(function(step) std.map(function(s) s { 'if': stepIfClause }, step), effectiveBuildSteps) else effectiveBuildSteps) +
+      self.pnpmPublishToRepositories(isPr=false, repositories=repositories, ifClause=stepIfClause),
+      permissions={ packages: 'write', contents: 'read', 'pull-requests': 'read' },
+      ifClause=ifClause,
     ),
 }
