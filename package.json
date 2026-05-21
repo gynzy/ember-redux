@@ -3,6 +3,13 @@
   "version": "6.0.5",
   "description": "ember-cli addon that provides simple redux bindings for ember.js",
   "packageManager": "pnpm@10.33.4",
+  "files": [
+    "addon",
+    "app",
+    "config",
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
     "build": "ember build",
     "lint:js": "eslint .",
