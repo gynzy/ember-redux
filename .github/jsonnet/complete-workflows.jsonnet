@@ -29,21 +29,19 @@ local yarn = import 'yarn.jsonnet';
     testJob=null,
     branch='main',
     packageManager='yarn',
-    image=null,
+    image='mirror.gcr.io/node:24',
     buildSteps=null,
   )::
     local runsOn = (if isPublicFork then 'ubuntu-latest' else null);
-    local defaultImage = if packageManager == 'pnpm' then 'node:24' else 'mirror.gcr.io/node:22';
-    local effectiveImage = if image != null then image else defaultImage;
     local defaultBuildSteps = if packageManager == 'pnpm' then [base.step('build', 'pnpm run build')]
                               else [base.step('build', 'yarn build')];
     local effectiveBuildSteps = if buildSteps != null then buildSteps else defaultBuildSteps;
-    local pubJob = if packageManager == 'pnpm'
-                   then pnpm.pnpmPublishJob(repositories=repositories, runsOn=runsOn, image=effectiveImage, buildSteps=effectiveBuildSteps)
-                   else yarn.yarnPublishJob(repositories=repositories, runsOn=runsOn, image=effectiveImage, buildSteps=effectiveBuildSteps);
-    local prevJob = if packageManager == 'pnpm'
-                    then pnpm.pnpmPublishPreviewJob(repositories=repositories, runsOn=runsOn, checkVersionBump=checkVersionBump, image=effectiveImage, buildSteps=effectiveBuildSteps)
-                    else yarn.yarnPublishPreviewJob(repositories=repositories, runsOn=runsOn, checkVersionBump=checkVersionBump, image=effectiveImage, buildSteps=effectiveBuildSteps);
+    local publishJob = if packageManager == 'pnpm'
+                   then pnpm.pnpmPublishJob(repositories=repositories, runsOn=runsOn, image=image, buildSteps=effectiveBuildSteps)
+                   else yarn.yarnPublishJob(repositories=repositories, runsOn=runsOn, image=image, buildSteps=effectiveBuildSteps);
+    local previewJob = if packageManager == 'pnpm'
+                    then pnpm.pnpmPublishPreviewJob(repositories=repositories, runsOn=runsOn, checkVersionBump=checkVersionBump, image=image, buildSteps=effectiveBuildSteps)
+                    else yarn.yarnPublishPreviewJob(repositories=repositories, runsOn=runsOn, checkVersionBump=checkVersionBump, image=image, buildSteps=effectiveBuildSteps);
 
     base.pipeline(
       'misc',
@@ -51,12 +49,12 @@ local yarn = import 'yarn.jsonnet';
     ) +
     base.pipeline(
       'publish-prod',
-      [pubJob],
+      [publishJob],
       event={ push: { branches: [branch] } },
     ) +
     base.pipeline(
       'pr',
-      [prevJob] +
+      [previewJob] +
       (if testJob != null then
          [testJob]
        else [])
