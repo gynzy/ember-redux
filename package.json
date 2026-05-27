@@ -1,7 +1,15 @@
 {
   "name": "@gynzy/ember-redux",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "description": "ember-cli addon that provides simple redux bindings for ember.js",
+  "packageManager": "pnpm@10.33.4",
+  "files": [
+    "addon",
+    "app",
+    "config",
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
     "build": "ember build",
     "lint:js": "eslint .",
@@ -14,7 +22,7 @@
     "url": "https://github.com/ember-redux/ember-redux/issues"
   },
   "engines": {
-    "node": ">= 8"
+    "node": ">=22"
   },
   "devDependencies": {
     "@ember/jquery": "2.0.0",
@@ -69,7 +77,7 @@
   "dependencies": {
     "ember-auto-import": "^2.5.0",
     "ember-cli-babel": "^7.13.0",
-    "redux": "^4.0.0"
+    "redux": "^4.2.1"
   },
   "ember": {
     "edition": "octane"
