@@ -9,7 +9,6 @@ local testJob = util.ghJob(
   steps=[
     util.pnpm.checkoutAndPnpm(
       ref='${{ github.event.pull_request.head.sha }}',
-      source='github',
     ),
     util.action('setup chrome', 'browser-actions/setup-chrome@latest'),
     util.step('test', 'pnpm test'),
@@ -17,7 +16,7 @@ local testJob = util.ghJob(
 );
 
 util.workflowJavascriptPackage(
-  repositories=['github', 'gynzy'],
+  repositories=['github'],
   packageManager='pnpm',
   branch='main',
   isPublicFork=true,
