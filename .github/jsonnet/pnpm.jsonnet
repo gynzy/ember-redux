@@ -1,6 +1,7 @@
 local actions = import 'actions.jsonnet';
 local base = import 'base.jsonnet';
 local cache = import 'cache.jsonnet';
+local deployment = import 'deployment.jsonnet';
 local misc = import 'misc.jsonnet';
 local yarn = import 'yarn.jsonnet';
 
@@ -144,7 +145,7 @@ local yarn = import 'yarn.jsonnet';
           runsOn=runsOn,
           image=image,
           useCredentials=useCredentials,
-          ifClause="${{ github.event.deployment.environment == 'production' || github.event.deployment.environment == 'prod' }}",
+          ifClause=deployment.deploymentTargets(['production']),
           steps=[
             self.checkoutAndPnpm(
               cacheName=null,  // to populate cache we want a clean install
