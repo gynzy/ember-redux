@@ -2,7 +2,7 @@
   "name": "@gynzy/ember-redux",
   "version": "6.0.5",
   "description": "ember-cli addon that provides simple redux bindings for ember.js",
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@11.13.0",
   "files": [
     "addon",
     "app",
