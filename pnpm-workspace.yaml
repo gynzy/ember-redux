@@ -1,2 +1,5 @@
 allowBuilds:
   core-js: true
+
+registries:
+  "@gynzy": https://npm.pkg.github.com
